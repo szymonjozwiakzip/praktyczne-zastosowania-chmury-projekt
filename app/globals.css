@@ -1,0 +1,163 @@
+:root {
+  --ink: #1c1712;
+  --muted: #6d6256;
+  --paper: #f7f1e7;
+  --paper-2: #efe6d8;
+  --line: rgba(28, 23, 18, 0.14);
+  --copper: #b5522a;
+  --copper-dark: #8c3b1c;
+  --stage: #2a241e;
+  --stage-2: #171410;
+  --ok: #1d4638;
+  --ok-bg: #e5f0ea;
+  --err: #8c2e22;
+  --err-bg: #f8e6e1;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-sans), "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(181, 82, 42, 0.18), transparent 32%),
+    linear-gradient(160deg, var(--stage) 0%, var(--stage-2) 70%);
+}
+
+.stage {
+  min-height: 100vh;
+  display: grid;
+  align-items: safe center;
+  justify-items: center;
+  padding: 32px 16px;
+}
+
+.card {
+  width: min(560px, 100%);
+  background: var(--paper);
+  border-radius: 28px;
+  padding: 36px 32px 32px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.form__header h1 {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field span {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fffdf9;
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 13px 14px;
+  font: inherit;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: 2px solid rgba(181, 82, 42, 0.35);
+  border-color: var(--copper);
+}
+
+.field--file input {
+  padding: 11px 12px;
+  background: var(--paper-2);
+}
+
+.file-hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.preview {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+
+.notice {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  line-height: 1.45;
+}
+
+.notice--success {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.notice--error {
+  background: var(--err-bg);
+  color: var(--err);
+}
+
+.submit {
+  border: 0;
+  border-radius: 999px;
+  padding: 15px 18px;
+  background: var(--copper);
+  color: white;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--copper-dark);
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 28px 20px;
+  }
+
+  .form__grid {
+    grid-template-columns: 1fr;
+  }
+}
