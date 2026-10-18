@@ -40,15 +40,32 @@ const formatCzasu = new Intl.DateTimeFormat("pl-PL", {
 });
 
 const formatLiczby = new Intl.NumberFormat("pl-PL");
+const NA_STRONE = 20;
+
+function adresAdmina(bezTestow: boolean, strona: number) {
+  const parametry = new URLSearchParams();
+  if (bezTestow) {
+    parametry.set("widok", "uczestnicy");
+  }
+  if (strona > 1) {
+    parametry.set("strona", String(strona));
+  }
+  const zapisane = parametry.toString();
+  return zapisane ? `/admin?${zapisane}` : "/admin";
+}
 
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ widok?: string }>;
+  searchParams: Promise<{ widok?: string; strona?: string }>;
 }) {
   const parametry = await searchParams;
   const bezTestow = parametry.widok === "uczestnicy";
-  const dane = await wczytajZapisy(bezTestow);
+  const zadanaStrona = Number.parseInt(parametry.strona ?? "1", 10);
+  const dane = await wczytajZapisy(
+    bezTestow,
+    Number.isFinite(zadanaStrona) ? zadanaStrona : 1,
+  );
   const pomiar = formatCzasu.format(new Date(raportOdczytu.zebrano));
 
   return (
@@ -68,11 +85,14 @@ export default async function AdminPage({
           <div className="admin-card__head">
             <h2>Baza zgłoszeń</h2>
             <div className="filter">
-              <Link href="/admin" aria-current={bezTestow ? undefined : "page"}>
+              <Link
+                href={adresAdmina(false, 1)}
+                aria-current={bezTestow ? undefined : "page"}
+              >
                 Wszystkie
               </Link>
               <Link
-                href="/admin?widok=uczestnicy"
+                href={adresAdmina(true, 1)}
                 aria-current={bezTestow ? "page" : undefined}
               >
                 Bez testu obciążenia
@@ -106,9 +126,9 @@ export default async function AdminPage({
               <div className="table-wrap">
                 <table>
                   <caption>
-                    {bezTestow
-                      ? "Ostatnie zgłoszenia uczestników, bez adresów loadtest."
-                      : "Ostatnie 40 zgłoszeń, razem z ruchem testowym."}
+                    {dane.wiersze.length === 0
+                      ? "Brak zgłoszeń w tym widoku."
+                      : `Pozycje ${dane.od}–${dane.do} z ${formatLiczby.format(dane.liczbaWidoku)}.`}
                   </caption>
                   <thead>
                     <tr>
@@ -149,6 +169,25 @@ export default async function AdminPage({
                   </tbody>
                 </table>
               </div>
+              <nav className="pager" aria-label="Strony zgłoszeń">
+                {dane.strona > 1 ? (
+                  <Link href={adresAdmina(bezTestow, dane.strona - 1)}>
+                    ← Poprzednia
+                  </Link>
+                ) : (
+                  <span className="pager__disabled">← Poprzednia</span>
+                )}
+                <span>
+                  Strona {dane.strona} z {dane.stron}
+                </span>
+                {dane.strona < dane.stron ? (
+                  <Link href={adresAdmina(bezTestow, dane.strona + 1)}>
+                    Następna →
+                  </Link>
+                ) : (
+                  <span className="pager__disabled">Następna →</span>
+                )}
+              </nav>
             </>
           ) : (
             <p className="notice notice--error" role="status">
@@ -213,12 +252,12 @@ function WorkshopBars({ warsztaty }: { warsztaty: Warsztat[] }) {
   );
 }
 
-async function wczytajZapisy(bezTestow: boolean) {
+async function wczytajZapisy(bezTestow: boolean, zadanaStrona: number) {
   try {
     await readyDatabase();
     const pool = getPool();
     const filtr = bezTestow ? "WHERE email NOT LIKE 'loadtest%'" : "";
-    const [podsumowanie, warsztaty, wiersze] = await Promise.all([
+    const [podsumowanie, warsztaty, ileWidoku] = await Promise.all([
       pool.query<Podsumowanie>(`
         SELECT
           COUNT(*)::int AS wszystkie,
@@ -233,14 +272,26 @@ async function wczytajZapisy(bezTestow: boolean) {
         GROUP BY workshop
         ORDER BY liczba DESC, workshop ASC
       `),
-      pool.query<Zgloszenie>(`
+      pool.query<{ liczba: number }>(`
+        SELECT COUNT(*)::int AS liczba
+        FROM registrations
+        ${filtr}
+      `),
+    ]);
+
+    const liczbaWidoku = ileWidoku.rows[0]?.liczba ?? 0;
+    const stron = Math.max(1, Math.ceil(liczbaWidoku / NA_STRONE));
+    const strona = Math.min(Math.max(1, zadanaStrona), stron);
+    const wiersze = await pool.query<Zgloszenie>(
+      `
         SELECT id, first_name, last_name, email, workshop, attachment_name, created_at
         FROM registrations
         ${filtr}
         ORDER BY created_at DESC, id DESC
-        LIMIT 40
-      `),
-    ]);
+        LIMIT $1 OFFSET $2
+      `,
+      [NA_STRONE, (strona - 1) * NA_STRONE],
+    );
 
     return {
       ok: true as const,
@@ -251,6 +302,11 @@ async function wczytajZapisy(bezTestow: boolean) {
       },
       warsztaty: warsztaty.rows,
       wiersze: wiersze.rows,
+      liczbaWidoku,
+      strona,
+      stron,
+      od: liczbaWidoku === 0 ? 0 : (strona - 1) * NA_STRONE + 1,
+      do: Math.min(strona * NA_STRONE, liczbaWidoku),
     };
   } catch (error) {
     console.error("Nie udało się odczytać zgłoszeń:", error);

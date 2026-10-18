@@ -1,3 +1,4 @@
+import { ChartCarousel } from "@/components/ChartCarousel";
 import { FAZY, type RaportObciazenia } from "@/lib/load-report";
 
 const ODCZYT = "#1d4638";
@@ -39,36 +40,42 @@ export function ReportCharts({
   zapis: RaportObciazenia;
 }) {
   return (
-    <div className="chart-grid">
-      <ChartCard
-        kicker="Zmiana w czasie"
-        title="Czas odpowiedzi p95"
-        note="Skala logarytmiczna. Linia przerywana to próg 600 ms z założeń testu."
-      >
-        <LatencyChart odczyt={odczyt} zapis={zapis} />
-      </ChartCard>
-      <ChartCard
-        kicker="Porównanie"
-        title="Plan a dokończone żądania"
-        note="10/s i 200/s to plan. Słupki obok pokazują, ile żądań na sekundę usługa naprawdę domknęła."
-      >
-        <ThroughputChart odczyt={odczyt} zapis={zapis} />
-      </ChartCard>
-      <ChartCard
-        kicker="Zmiana w czasie"
-        title="Odsetek błędów HTTP"
-        note="Próg z prezentacji to mniej niż 1% błędów."
-      >
-        <ErrorChart odczyt={odczyt} zapis={zapis} />
-      </ChartCard>
-      <ChartCard
-        kicker="Rozkład"
-        title="Kody odpowiedzi"
-        note="502 to odmowa bramki Rendera, gdy instancja nie nadążała z odpowiedzią."
-      >
-        <StatusChart odczyt={odczyt} zapis={zapis} />
-      </ChartCard>
-    </div>
+    <ChartCarousel
+      slides={[
+        <ChartCard
+          key="p95"
+          kicker="Zmiana w czasie"
+          title="Czas odpowiedzi p95"
+          note="Skala logarytmiczna. Linia przerywana to próg 600 ms z założeń testu."
+        >
+          <LatencyChart odczyt={odczyt} zapis={zapis} />
+        </ChartCard>,
+        <ChartCard
+          key="plan"
+          kicker="Porównanie"
+          title="Plan a dokończone żądania"
+          note="10/s i 200/s to plan. Słupki obok pokazują, ile żądań na sekundę usługa naprawdę domknęła."
+        >
+          <ThroughputChart odczyt={odczyt} zapis={zapis} />
+        </ChartCard>,
+        <ChartCard
+          key="bledy"
+          kicker="Zmiana w czasie"
+          title="Odsetek błędów HTTP"
+          note="Próg z prezentacji to mniej niż 1% błędów."
+        >
+          <ErrorChart odczyt={odczyt} zapis={zapis} />
+        </ChartCard>,
+        <ChartCard
+          key="kody"
+          kicker="Rozkład"
+          title="Kody odpowiedzi"
+          note="502 to odmowa bramki Rendera, gdy instancja nie nadążała z odpowiedzią."
+        >
+          <StatusChart odczyt={odczyt} zapis={zapis} />
+        </ChartCard>,
+      ]}
+    />
   );
 }
 

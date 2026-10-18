@@ -357,11 +357,53 @@ th {
   color: var(--muted);
 }
 
-.chart-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+.carousel {
   margin-top: 16px;
+}
+
+.carousel__stage .chart-card {
+  padding: 8px 4px 0;
+  background: transparent;
+}
+
+.carousel__nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.carousel__nav button,
+.pager a,
+.pager__disabled {
+  border: 1px solid var(--line);
+  background: #fffdf9;
+  color: var(--ink);
+  border-radius: 999px;
+  min-width: 44px;
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.carousel__nav button {
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.pager__disabled {
+  color: var(--muted);
 }
 
 .chart-card h3 {
@@ -442,7 +484,6 @@ th {
 
 @media (max-width: 800px) {
   .kpis,
-  .chart-grid,
   .workshop-row {
     grid-template-columns: 1fr;
   }
