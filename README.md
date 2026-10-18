@@ -55,3 +55,13 @@ Repozytorium zawiera `render.yaml`. W panelu Render wybierz **New → Blueprint*
 Połączenie z bazą odbywa się wyłącznie przez `process.env.DATABASE_URL`.
 
 Potwierdzenie rejestracji pojawia się w logach usługi (zakładka **Logs**), a nie jako prawdziwa wysyłka e-mail.
+
+## Test obciążenia
+
+Profil odpowiada prezentacji: 20 s po 10 żądań/s, 40 s po 200 żądań/s, 20 s wyciszenia. Progi: poniżej 1% błędów i p95 poniżej 600 ms. Osobno mierzony jest odczyt strony i zapis zgłoszenia do PostgreSQL.
+
+```bash
+npm run loadtest
+```
+
+Wynik ląduje w `reports/eksperyment-obciazenia.pdf`. Surowe liczby są w `reports/odczyt.json` i `reports/zapis.json`. Czasy k6 nie zapisują się w bazie aplikacji. W bazie widać tylko udane zgłoszenia testowe (`loadtest+…@example.com`), a na Renderze ruch widać w Metrics i Logs.

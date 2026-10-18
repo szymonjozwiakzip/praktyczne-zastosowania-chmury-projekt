@@ -161,3 +161,295 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.admin-page {
+  min-height: 100vh;
+  padding: 28px 16px 48px;
+}
+
+.admin-wrap {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+}
+
+.admin-head,
+.admin-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.admin-head h1,
+.admin-card h2,
+.chart-card h3 {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.admin-head h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: #f6f1e8;
+}
+
+.admin-link,
+.filter a {
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #fffdf9;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.admin-head .admin-link {
+  color: var(--ink);
+}
+
+.filter {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter a[aria-current="page"] {
+  background: var(--ink);
+  color: #f6f1e8;
+  border-color: var(--ink);
+}
+
+.admin-card,
+.chart-card {
+  background: var(--paper);
+  border-radius: 24px;
+  padding: 22px;
+}
+
+.admin-card h2 {
+  font-size: 1.7rem;
+}
+
+.admin-lead,
+.admin-conclusion,
+.chart-card__note,
+.chart-card__kicker {
+  color: var(--muted);
+}
+
+.admin-lead,
+.admin-conclusion {
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+.admin-conclusion {
+  color: var(--ink);
+  max-width: 70ch;
+}
+
+.chart-card__kicker {
+  margin: 0 0 6px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.admin-head .chart-card__kicker {
+  color: #d7c6b0;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.kpi {
+  background: #fffdf9;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.kpi span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.kpi strong {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.workshop-list {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.workshop-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.3fr) 2fr auto;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.92rem;
+}
+
+.workshop-track {
+  height: 10px;
+  background: var(--paper-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.workshop-track span {
+  display: block;
+  height: 100%;
+  background: var(--forest);
+  border-radius: inherit;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+caption {
+  caption-side: bottom;
+  text-align: left;
+  color: var(--muted);
+  padding-top: 8px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+th {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.row-test td {
+  color: var(--muted);
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.chart-card h3 {
+  font-size: 1.35rem;
+  margin-bottom: 8px;
+}
+
+.chart-card figure {
+  margin: 0;
+}
+
+.chart-card svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.axis {
+  fill: var(--muted);
+  font-size: 11px;
+  font-family: var(--font-sans), sans-serif;
+}
+
+.bar-label {
+  fill: var(--ink);
+  font-size: 10px;
+  font-family: var(--font-sans), sans-serif;
+}
+
+.legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-bottom: 4px;
+}
+
+.legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+
+.chart-card__note {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.status-chart {
+  display: grid;
+  gap: 16px;
+  padding: 12px 0 4px;
+}
+
+.status-row__label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+.status-row__label span {
+  color: var(--muted);
+}
+
+.status-bar {
+  display: flex;
+  height: 16px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+
+@media (max-width: 800px) {
+  .kpis,
+  .chart-grid,
+  .workshop-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-head,
+  .admin-card__head {
+    align-items: start;
+    flex-direction: column;
+  }
+}
